@@ -15,6 +15,7 @@ import Decks from './components/Decks'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
 
+const Tab = createBottomTabNavigator()
 const Tabs = (props) => {
   return (
     <Tab.Navigator

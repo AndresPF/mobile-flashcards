@@ -10,3 +10,5 @@ class DeckDetail extends Component {
 		)
 	}
 }
+
+export default DeckDetail

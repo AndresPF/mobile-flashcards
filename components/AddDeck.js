@@ -10,3 +10,5 @@ class AddDeck extends Component {
 		)
 	}
 }
+
+export default AddDeck

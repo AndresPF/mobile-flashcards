@@ -10,3 +10,5 @@ class Decks extends Component {
 		)
 	}
 }
+
+export default Decks
