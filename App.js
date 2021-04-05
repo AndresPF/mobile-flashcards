@@ -57,7 +57,13 @@ const MainNavigation = (props) => {
   return (
     <NavigationContainer style={{ flex: 1 }}>
       <Stack.Navigator>
-        <Stack.Screen name='Tabs' component={Tabs} />
+        <Stack.Screen
+          name='Decks'
+          component={Tabs}
+          options={{
+            headerTitleAlign: 'center',
+          }}
+        />
         <Stack.Screen
           name='DeckDetail'
           component={DeckDetail}
@@ -66,6 +72,7 @@ const MainNavigation = (props) => {
             headerStyle: {
               backgroundColor: purple,
             },
+            headerTitleAlign: 'center',
           }}
         />
       </Stack.Navigator>
@@ -88,5 +95,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  center: {
+    textAlign: 'center',
   },
 })

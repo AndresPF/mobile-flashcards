@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-import { View, Text, FlatList, StyleSheet } from "react-native"
-import { handleReceiveDecks } from "../actions"
-import { connect } from "react-redux"
-import TextButton from "./TextButton"
+import React, { Component } from 'react'
+import { View, Text, FlatList, StyleSheet } from 'react-native'
+import { handleReceiveDecks } from '../actions'
+import { connect } from 'react-redux'
+import TextButton from './TextButton'
 
 function Deck({ deck, onPress }) {
 	return (
@@ -25,7 +25,16 @@ class Decks extends Component {
 			<View>
 				<FlatList
 					data={Object.keys(decks)}
-					renderItem={({ item }) => <Deck deck={decks[item]} />}
+					renderItem={({ item }) => (
+						<Deck
+							deck={decks[item]}
+							onPress={() =>
+								this.props.navigation.navigate('DeckDetail', {
+									id: item,
+								})
+							}
+						/>
+					)}
 					keyExtractor={(item) => item}
 				/>
 			</View>
@@ -35,8 +44,8 @@ class Decks extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		alignItems: "center",
-		justifyContent: "center",
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	listButton: {
 		borderBottomWidth: 1,
@@ -46,7 +55,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 26,
-		fontWeight: "700",
+		fontWeight: '700',
 	},
 })
 

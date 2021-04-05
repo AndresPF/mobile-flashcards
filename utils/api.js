@@ -1,26 +1,29 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CARDS_STORAGE_KEY, formatDeck } from './helpers'
+import { CARDS_STORAGE_KEY } from './helpers'
 
 export function getDecks() {
 	return AsyncStorage.getItem(CARDS_STORAGE_KEY)
 }
 
-export function uploadDecks(decks){
+export function uploadDecks(decks) {
 	return AsyncStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(decks))
 }
 
 function getDeck(key) {
-	return AsyncStorage.getItem(CARDS_STORAGE_KEY),then((results) => {
-		const data = JSON.parse(results)
-		return data[key].questions
-	})
+	return (
+		AsyncStorage.getItem(CARDS_STORAGE_KEY),
+		then((results) => {
+			const data = JSON.parse(results)
+			return data[key].questions
+		})
+	)
 }
 
-export function addNewDeck(key) {
+export function addNewDeck(deck) {
 	return AsyncStorage.mergeItem(
 		CARDS_STORAGE_KEY,
 		JSON.stringify({
-			[key]: formatDeck(key),
+			[deck.title]: deck,
 		})
 	)
 }
@@ -34,19 +37,20 @@ export function removeDeck(key) {
 	})
 }
 
-export function addCardToDeck({key, card}) {
+export function addCardToDeck({ key, card }) {
 	return getDeck(key).then((questions) => {
 		return AsyncStorage.mergeItem(
-		CARDS_STORAGE_KEY,
-		JSON.stringify({
-			[key]:{
-				questions: questions.concat([{
-					question: card.question,
-					answer: card.answer
-				}]),
-			}
-		})
-	)
+			CARDS_STORAGE_KEY,
+			JSON.stringify({
+				[key]: {
+					questions: questions.concat([
+						{
+							question: card.question,
+							answer: card.answer,
+						},
+					]),
+				},
+			})
+		)
 	})
-	
 }

@@ -1,28 +1,86 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput } from 'react-native'
-import TextButton from "./TextButton"
+import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native'
+import TextButton from './TextButton'
+import { connect } from 'react-redux'
+import { handleNewDeck } from '../actions'
+import { purple, white } from '../utils/colors'
 
 class AddDeck extends Component {
 	state = {
-		text: ''
+		text: '',
 	}
 	onPress = () => {
-
+		const { text } = this.state
+		const { dispatch, navigation } = this.props
+		Keyboard.dismiss()
+		dispatch(handleNewDeck(text))
+		this.setState(() => ({
+			text: '',
+		}))
+		navigation.goBack()
 	}
-	onChange = (target) => {
-		this.setState(({
-			text: target.text
+	onChange = (e) => {
+		this.setState(() => ({
+			text: e,
 		}))
 	}
 	render() {
+		const { text } = this.state
+		const checkDisabled = text === ''
 		return (
-			<View>
-				<Text>What is the title of the new deck?</Text>
-				<TextInput placeholder={'Deck Title'} onchange={(e.currentTarget) => this.onChange} />
-				<TextButton>Add Deck</TextButton>
+			<View style={styles.container}>
+				<Text style={styles.title}>What is the title of the new deck?</Text>
+				<TextInput
+					style={styles.input}
+					placeholder={'Deck Title'}
+					onChangeText={this.onChange}
+					value={text}
+				/>
+				<TextButton
+					style={[styles.button, checkDisabled && styles.disabled]}
+					onPress={this.onPress}
+					disabled={checkDisabled}
+				>
+					Add Deck
+				</TextButton>
 			</View>
 		)
 	}
 }
 
-export default AddDeck
+const styles = StyleSheet.create({
+	container: {
+		padding: 40,
+		paddingTop: 100,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	title: {
+		fontWeight: '700',
+		fontSize: 30,
+		textAlign: 'center',
+	},
+	input: {
+		backgroundColor: white,
+		borderWidth: 1,
+		width: '100%',
+		marginTop: 25,
+		marginBottom: 10,
+		borderRadius: 8,
+		padding: 5,
+		borderColor: purple,
+	},
+	button: {
+		padding: 10,
+		fontWeight: '600',
+		fontSize: 18,
+		backgroundColor: purple,
+		color: white,
+		borderRadius: 8,
+	},
+	disabled: {
+		opacity: 0.3,
+	},
+})
+
+export default connect()(AddDeck)
