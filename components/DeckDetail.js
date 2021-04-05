@@ -15,7 +15,10 @@ class DeckDetail extends Component {
 		})
 	}
 
-	addCard = () => {}
+	addCard = () => {
+		const { id, title, navigation } = this.props
+		navigation.push('Add Card', { id, title })
+	}
 
 	startQuiz = () => {}
 
@@ -33,7 +36,7 @@ class DeckDetail extends Component {
 				<Text style={{ textAlign: 'center' }}>{cards} Cards</Text>
 				<TextButton
 					style={[styles.button, styles.lightButton]}
-					onPress={this.onPress}
+					onPress={this.addCard}
 				>
 					Add Card
 				</TextButton>

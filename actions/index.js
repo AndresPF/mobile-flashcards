@@ -1,4 +1,10 @@
-import { getDecks, uploadDecks, addNewDeck, removeDeck } from '../utils/api'
+import {
+	getDecks,
+	uploadDecks,
+	addNewDeck,
+	removeDeck,
+	addCard,
+} from '../utils/api'
 import { dummyDecks, formatDeck } from '../utils/helpers'
 export const RECEIVE_DECKS = 'RECEIVE_DECKS'
 export const ADD_DECK = 'ADD_DECK'
@@ -60,6 +66,14 @@ export function handleDeleteDeck(id) {
 	return (dispatch) => {
 		return removeDeck(id).then(() => {
 			dispatch(deleteDeck(id))
+		})
+	}
+}
+
+export function handleAddCardToDeck(card) {
+	return (dispatch) => {
+		return addCard(card).then(() => {
+			dispatch(addCardToDeck(card))
 		})
 	}
 }

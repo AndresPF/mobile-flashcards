@@ -10,13 +10,10 @@ export function uploadDecks(decks) {
 }
 
 function getDeck(key) {
-	return (
-		AsyncStorage.getItem(CARDS_STORAGE_KEY),
-		then((results) => {
-			const data = JSON.parse(results)
-			return data[key].questions
-		})
-	)
+	return AsyncStorage.getItem(CARDS_STORAGE_KEY).then((results) => {
+		const data = JSON.parse(results)
+		return data[key].questions
+	})
 }
 
 export function addNewDeck(deck) {
@@ -37,18 +34,13 @@ export function removeDeck(key) {
 	})
 }
 
-export function addCardToDeck({ key, card }) {
+export function addCard({ key, card }) {
 	return getDeck(key).then((questions) => {
 		return AsyncStorage.mergeItem(
 			CARDS_STORAGE_KEY,
 			JSON.stringify({
 				[key]: {
-					questions: questions.concat([
-						{
-							question: card.question,
-							answer: card.answer,
-						},
-					]),
+					questions: questions.concat([card]),
 				},
 			})
 		)

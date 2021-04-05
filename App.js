@@ -14,6 +14,7 @@ import { purple, white } from './utils/colors'
 import Decks from './components/Decks'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
+import AddCard from './components/AddCard'
 
 const Tab = createBottomTabNavigator()
 const Tabs = (props) => {
@@ -67,6 +68,17 @@ const MainNavigation = (props) => {
         <Stack.Screen
           name='DeckDetail'
           component={DeckDetail}
+          options={{
+            headerTintColor: white,
+            headerStyle: {
+              backgroundColor: purple,
+            },
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name='Add Card'
+          component={AddCard}
           options={{
             headerTintColor: white,
             headerStyle: {
