@@ -5,6 +5,7 @@ import TextButton from './TextButton'
 import { Ionicons } from '@expo/vector-icons'
 import { white, black, red, green, gray } from '../utils/colors'
 import { HeaderBackButton } from '@react-navigation/stack'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 class Quiz extends Component {
 	state = {
@@ -14,6 +15,7 @@ class Quiz extends Component {
 		const { id, cards, index, navigation } = this.props
 		const card = cards[index]
 		if (card === undefined && cards.length !== 0) {
+			clearLocalNotification().then(setLocalNotification)
 			navigation.setOptions({
 				headerLeft: () => (
 					<HeaderBackButton

@@ -3,22 +3,32 @@ import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native'
 import TextButton from './TextButton'
 import { connect } from 'react-redux'
 import { handleNewDeck } from '../actions'
-import { purple, white } from '../utils/colors'
+import { purple, white, red } from '../utils/colors'
 
 class AddDeck extends Component {
 	state = {
 		text: '',
+		error: false,
 	}
 	onPress = () => {
 		const { text } = this.state
-		const { dispatch, navigation } = this.props
-		Keyboard.dismiss()
-		dispatch(handleNewDeck(text)).then(() => {
-			navigation.navigate('DeckDetail', { id: text })
+
+		if (text === '') {
 			this.setState(() => ({
-				text: '',
+				error: true,
 			}))
-		})
+		} else {
+			const { dispatch, navigation } = this.props
+
+			Keyboard.dismiss()
+			dispatch(handleNewDeck(text)).then(() => {
+				navigation.navigate('DeckDetail', { id: text })
+				this.setState(() => ({
+					text: '',
+					error: false,
+				}))
+			})
+		}
 	}
 	onChange = (e) => {
 		this.setState(() => ({
@@ -26,24 +36,20 @@ class AddDeck extends Component {
 		}))
 	}
 	render() {
-		const { text } = this.state
-		const checkDisabled = text === ''
+		const { text, error } = this.state
 		return (
 			<View style={styles.container}>
 				<Text style={styles.title}>What is the title of the new deck?</Text>
 				<TextInput
-					style={styles.input}
+					style={[styles.input, error && styles.error]}
 					placeholder={'Deck Title'}
 					onChangeText={this.onChange}
 					value={text}
 				/>
-				<TextButton
-					style={[styles.button, checkDisabled && styles.disabled]}
-					onPress={this.onPress}
-					disabled={checkDisabled}
-				>
+				<TextButton style={styles.button} onPress={this.onPress}>
 					Add Deck
 				</TextButton>
+				{error && <Text style={styles.warning}>Title cannot be empty</Text>}
 			</View>
 		)
 	}
@@ -79,8 +85,13 @@ const styles = StyleSheet.create({
 		color: white,
 		borderRadius: 8,
 	},
-	disabled: {
-		opacity: 0.3,
+	warning: {
+		marginTop: 10,
+		color: red,
+		fontWeight: '600',
+	},
+	error: {
+		borderColor: red,
 	},
 })
 

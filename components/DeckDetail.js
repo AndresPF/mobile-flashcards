@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { purple, white, red } from '../utils/colors'
-import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 import { connect } from 'react-redux'
 import TextButton from './TextButton'
 import { handleDeleteDeck } from '../actions'
@@ -36,7 +35,6 @@ class DeckDetail extends Component {
 	startQuiz = () => {
 		const { id, cards, navigation } = this.props
 		navigation.push('Quiz', { id, index: 0, correct: 0, cards })
-		clearLocalNotification().then(setLocalNotification)
 	}
 
 	deleteDeck = () => {

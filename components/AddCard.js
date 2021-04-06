@@ -3,24 +3,33 @@ import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native'
 import TextButton from './TextButton'
 import { connect } from 'react-redux'
 import { handleAddCardToDeck } from '../actions'
-import { purple, white } from '../utils/colors'
+import { purple, white, red } from '../utils/colors'
 
 class AddCard extends Component {
 	state = {
 		question: '',
 		answer: '',
+		error: false,
 	}
 	onPress = () => {
-		const { id } = this.props
 		const { question, answer } = this.state
-		const { dispatch, navigation } = this.props
-		Keyboard.dismiss()
-		dispatch(handleAddCardToDeck({ key: id, card: { question, answer } }))
-		this.setState(() => ({
-			question: '',
-			answer: '',
-		}))
-		navigation.goBack()
+
+		if (question === '' || answer === '') {
+			this.setState(() => ({
+				error: true,
+			}))
+		} else {
+			const { id, dispatch, navigation } = this.props
+
+			Keyboard.dismiss()
+			dispatch(handleAddCardToDeck({ key: id, card: { question, answer } }))
+			this.setState(() => ({
+				question: '',
+				answer: '',
+				error: false,
+			}))
+			navigation.goBack()
+		}
 	}
 	onChangeQuestion = (e) => {
 		this.setState(() => ({
@@ -34,32 +43,33 @@ class AddCard extends Component {
 	}
 	render() {
 		const { title } = this.props
-		const { question, answer } = this.state
-		const checkDisabled = question === '' || answer === ''
+		const { question, answer, error } = this.state
+
 		return (
 			<View style={styles.container}>
 				<Text style={styles.title}>
 					What is the question you want to add to {title}?
 				</Text>
 				<TextInput
-					style={styles.input}
+					style={[styles.input, error && question === '' && styles.error]}
 					placeholder={'Question'}
 					onChangeText={this.onChangeQuestion}
 					value={question}
 				/>
 				<TextInput
-					style={styles.input}
+					style={[styles.input, error && answer === '' && styles.error]}
 					placeholder={'Answer'}
 					onChangeText={this.onChangeAnswer}
 					value={answer}
 				/>
-				<TextButton
-					style={[styles.button, checkDisabled && styles.disabled]}
-					onPress={this.onPress}
-					disabled={checkDisabled}
-				>
+				<TextButton style={styles.button} onPress={this.onPress}>
 					Add Card
 				</TextButton>
+				{error && (
+					<Text style={styles.warning}>
+						Question and Answer cannot be empty
+					</Text>
+				)}
 			</View>
 		)
 	}
@@ -95,8 +105,13 @@ const styles = StyleSheet.create({
 		color: white,
 		borderRadius: 8,
 	},
-	disabled: {
-		opacity: 0.3,
+	warning: {
+		marginTop: 10,
+		color: red,
+		fontWeight: '600',
+	},
+	error: {
+		borderColor: red,
 	},
 })
 
