@@ -15,6 +15,7 @@ import Decks from './components/Decks'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
 import AddCard from './components/AddCard'
+import Quiz from './components/Quiz'
 
 const Tab = createBottomTabNavigator()
 const Tabs = (props) => {
@@ -57,34 +58,29 @@ const Stack = createStackNavigator()
 const MainNavigation = (props) => {
   return (
     <NavigationContainer style={{ flex: 1 }}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerTintColor: white,
+          headerStyle: {
+            backgroundColor: purple,
+          },
+          headerTitleAlign: 'center',
+        }}
+      >
         <Stack.Screen
-          name='Decks'
+          name='Tabs'
           component={Tabs}
           options={{
-            headerTitleAlign: 'center',
+            title: 'Decks',
           }}
         />
+        <Stack.Screen name='DeckDetail' component={DeckDetail} />
+        <Stack.Screen name='Add Card' component={AddCard} />
         <Stack.Screen
-          name='DeckDetail'
-          component={DeckDetail}
+          name='Quiz'
+          component={Quiz}
           options={{
-            headerTintColor: white,
-            headerStyle: {
-              backgroundColor: purple,
-            },
-            headerTitleAlign: 'center',
-          }}
-        />
-        <Stack.Screen
-          name='Add Card'
-          component={AddCard}
-          options={{
-            headerTintColor: white,
-            headerStyle: {
-              backgroundColor: purple,
-            },
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
           }}
         />
       </Stack.Navigator>

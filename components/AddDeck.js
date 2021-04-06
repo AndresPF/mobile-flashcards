@@ -13,11 +13,12 @@ class AddDeck extends Component {
 		const { text } = this.state
 		const { dispatch, navigation } = this.props
 		Keyboard.dismiss()
-		dispatch(handleNewDeck(text))
-		this.setState(() => ({
-			text: '',
-		}))
-		navigation.goBack()
+		dispatch(handleNewDeck(text)).then(() => {
+			navigation.navigate('DeckDetail', { id: text })
+			this.setState(() => ({
+				text: '',
+			}))
+		})
 	}
 	onChange = (e) => {
 		this.setState(() => ({

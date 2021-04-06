@@ -4,15 +4,27 @@ import { purple, white, red } from '../utils/colors'
 import { connect } from 'react-redux'
 import TextButton from './TextButton'
 import { handleDeleteDeck } from '../actions'
+import { HeaderBackButton } from '@react-navigation/stack'
 
 class DeckDetail extends Component {
 	componentDidMount() {
-		const { setOptions } = this.props.navigation
+		const { navigation } = this.props
 		const { title } = this.props
 
-		setOptions({
+		navigation.setOptions({
 			title,
+			headerLeft: () => (
+				<HeaderBackButton
+					onPress={() => navigation.navigate('Decks')}
+					tintColor={white}
+				/>
+			),
 		})
+	}
+
+	shouldComponentUpdate() {
+		const { title } = this.props
+		return title !== undefined
 	}
 
 	addCard = () => {
@@ -20,27 +32,31 @@ class DeckDetail extends Component {
 		navigation.push('Add Card', { id, title })
 	}
 
-	startQuiz = () => {}
+	startQuiz = () => {
+		const { id, cards, navigation } = this.props
+		navigation.push('Quiz', { id, index: 0, correct: 0, cards })
+	}
 
 	deleteDeck = () => {
 		const { id, navigation, dispatch } = this.props
-		dispatch(handleDeleteDeck(id))
 		navigation.navigate('Decks')
+		dispatch(handleDeleteDeck(id))
 	}
 
 	render() {
 		const { title, cards, checkDisabled } = this.props
+		const len = cards ? cards.length : 0
 		return (
 			<View style={styles.container}>
 				<Text style={styles.title}>{title}</Text>
-				<Text style={{ textAlign: 'center' }}>{cards} Cards</Text>
+				<Text style={{ textAlign: 'center' }}>{len} Cards</Text>
 				<TextButton
 					style={[styles.button, styles.lightButton]}
 					onPress={this.addCard}
 				>
 					Add Card
 				</TextButton>
-				<TextButton style={styles.button} onPress={this.onPress}>
+				<TextButton style={styles.button} onPress={this.startQuiz}>
 					Start Quiz
 				</TextButton>
 				<TextButton style={styles.redButton} onPress={this.deleteDeck}>
@@ -91,7 +107,7 @@ function mapStateToProps(decks, { route }) {
 	return {
 		id,
 		title: decks[id]?.title,
-		cards: decks[id]?.questions ? decks[id].questions.length : 0,
+		cards: decks[id]?.questions,
 		checkDisabled: decks[id]?.questions.length === 0,
 	}
 }
