@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Udacity Flashcards Project",
+    "githubUrl": "https://github.com/AndresPF/mobile-flashcards"
   }
 }
