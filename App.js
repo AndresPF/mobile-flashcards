@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
 import { purple, white } from './utils/colors'
+import { setLocalNotification } from './utils/helpers'
 import Decks from './components/Decks'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
@@ -88,13 +89,18 @@ const MainNavigation = (props) => {
   )
 }
 
-export default function App() {
-  return (
-    <Provider store={createStore(reducer, middleware)}>
-      <StatusBar style='auto' />
-      <MainNavigation />
-    </Provider>
-  )
+export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
+  render() {
+    return (
+      <Provider store={createStore(reducer, middleware)}>
+        <StatusBar style='auto' />
+        <MainNavigation />
+      </Provider>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
